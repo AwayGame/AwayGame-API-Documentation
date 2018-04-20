@@ -1,0 +1,537 @@
+
+<!doctype html>
+<html>
+  <head>
+    <link href="images/favicon.ico" rel="icon" type="image/ico" />
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;javascript&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo1.png" class="logo" alt="Logo1" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="javascript">javascript</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="authentication">Authentication</a>
+          </li>
+          <li>
+            <a href="#cities" class="toc-h1 toc-link" data-title="cities">Cities</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-all-cities" class="toc-h2 toc-link" data-title="get-all-cities">Get All Cities</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#teams" class="toc-h1 toc-link" data-title="teams">Teams</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-a-specific-team-based-on-city" class="toc-h2 toc-link" data-title="get-a-specific-team-based-on-city">Get a Specific Team Based On City</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#events" class="toc-h1 toc-link" data-title="events">Events</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-events" class="toc-h2 toc-link" data-title="get-events">Get Events</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#restaurants" class="toc-h1 toc-link" data-title="restaurants">Restaurants</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-restaurant-locations" class="toc-h2 toc-link" data-title="get-restaurant-locations">Get Restaurant Locations</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#errors" class="toc-h1 toc-link" data-title="errors">Errors</a>
+          </li>
+      </div>
+        <ul class="toc-footer">
+            <li><a href="https://www.awaygame.co/">AwayGame</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>Welcome to the AwayGame Internal API documentation! This documentation can be used by any developer working
+on the AwayGame mobile app.</p>
+<h1 id='authentication'>Authentication</h1>
+<!-- 
+  Uncomment when ready for Authentication
+
+> To authorize, use this code:
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+```
+
+> Make sure to replace `meowmeowmeow` with your API key.
+
+-->
+
+<p>Coming soon...</p>
+
+<!--
+
+Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+
+Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+
+`Authorization: meowmeowmeow`
+
+<aside class="notice">
+You must replace <code>meowmeowmeow</code> with your personal API key.
+</aside>
+-->
+<h1 id='cities'>Cities</h1><h2 id='get-all-cities'>Get All Cities</h2><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
+    </span><span class="s2">"ticketMasterDmaId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"409"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"imageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://i1.wp.com/donate.ncjw.org/wp-content/uploads/2015/11/washington-dc-skyline-photo.jpg?fit=1200%2C675"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"googlePlaceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJW-T2Wt7Gt4kRKl2I1CJFUsI"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Washington DC"</span><span class="w">
+</span><span class="p">},{</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Philadelphia"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"ticketMasterDmaId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"358"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"imageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"googlePlaceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJ60u11Ni3xokRwVg-jNgU9Yk"</span><span class="w">
+</span><span class="p">}]</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves all cities in the database.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>GET https://us-central1-awaygame-api.cloudfunctions.net/api/cities</code></p>
+<h3 id='response'>Response</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ticketMasterDmaId</td>
+<td>The ID used by the TicketMaster API to identify the city</td>
+</tr>
+<tr>
+<td>imageUrl</td>
+<td>A URL for an image of the city</td>
+</tr>
+<tr>
+<td>googlePlaceId</td>
+<td>The ID used by the Google Places API to identify the city</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name of the city</td>
+</tr>
+</tbody></table>
+
+<!-- Teams Endpoints -->
+<h1 id='teams'>Teams</h1><h2 id='get-a-specific-team-based-on-city'>Get a Specific Team Based On City</h2><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
+    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hockey"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stars"</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mavericks"</span><span class="w">
+</span><span class="p">}]</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves all teams associated with the city with objectId <code>cityId</code>.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET https://us-central1-awaygame-api.cloudfunctions.net/api/getTeamsFromCity/:cityId</code></p>
+<h3 id='url-parameters'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>cityId</td>
+<td>The objectId of the City</td>
+</tr>
+</tbody></table>
+<h3 id='response-2'>Response</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sport</td>
+<td>The sport the team is associated with</td>
+</tr>
+<tr>
+<td>city</td>
+<td>The city the team is from</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name of the team</td>
+</tr>
+</tbody></table>
+<h1 id='events'>Events</h1><h2 id='get-events'>Get Events</h2><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
+    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hockey"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stars"</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mavericks"</span><span class="w">
+</span><span class="p">}]</span><span class="w">
+</span></code></pre>
+<p>This endpoint searches TicketMaster for events and games within the date ranges provided for a specific team.</p>
+<h3 id='http-request-3'>HTTP Request</h3>
+<p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/getEvents</code></p>
+<h3 id='request-body'>Request Body</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>team</td>
+<td>The name of the team</td>
+</tr>
+<tr>
+<td>city</td>
+<td>The name of the city</td>
+</tr>
+<tr>
+<td>startDate</td>
+<td>The beginning time to search for games</td>
+</tr>
+<tr>
+<td>endDate</td>
+<td>The end time to search for games</td>
+</tr>
+</tbody></table>
+<h3 id='response-3'>Response</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sport</td>
+<td>The sport the team is associated with</td>
+</tr>
+<tr>
+<td>city</td>
+<td>The city the team is from</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name of the team</td>
+</tr>
+</tbody></table>
+<pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
+    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hockey"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stars"</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mavericks"</span><span class="w">
+</span><span class="p">}]</span><span class="w">
+</span></code></pre><h1 id='restaurants'>Restaurants</h1><h2 id='get-restaurant-locations'>Get Restaurant Locations</h2>
+<p>This endpoint searches Yelp and Foursquare for restaurants and activites that match the given category.</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/getLocationsOfRestaurants</code></p>
+<h3 id='request-body-2'>Request Body</h3><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"intimate"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-122.3321</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">47.6062</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>category</td>
+<td>The type of location to find</td>
+</tr>
+<tr>
+<td>longitude</td>
+<td>Longitude of the city</td>
+</tr>
+<tr>
+<td>latitude</td>
+<td>Latitude of the city</td>
+</tr>
+</tbody></table>
+<h3 id='response-4'>Response</h3>
+<p>Response here</p>
+<h1 id='errors'>Errors</h1>
+<p>The AwayGame API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request -- Your request is invalid.</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized -- Your API key is wrong.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- The endpoint requested is hidden for administrators only.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found -- The specified endpoint could not be found.</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="javascript">javascript</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
