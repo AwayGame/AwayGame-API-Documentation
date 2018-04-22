@@ -50,25 +50,13 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 -->
 
-# Cities
+# Cities and Teams
 
 ## Get All Cities
 
-```json
-[{
-    "ticketMasterDmaId": "409",
-    "imageUrl": "https://i1.wp.com/donate.ncjw.org/wp-content/uploads/2015/11/washington-dc-skyline-photo.jpg?fit=1200%2C675",
-    "googlePlaceId": "ChIJW-T2Wt7Gt4kRKl2I1CJFUsI",
-    "name": "Washington DC"
-},{
-    "name": "Philadelphia",
-    "ticketMasterDmaId": "358",
-    "imageUrl": "https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg",
-    "googlePlaceId": "ChIJ60u11Ni3xokRwVg-jNgU9Yk"
-}]
-```
-
-This endpoint retrieves all cities in the database.
+This endpoint retrieves all cities and their associated teams in the database. Ideally this
+endpoint should be called as the application loads, as this data is needed to make
+a user's AwayGame.
 
 ### HTTP Request
 
@@ -76,20 +64,32 @@ This endpoint retrieves all cities in the database.
 
 ### Response
 
+```json
+[{
+    "ticketMasterDmaId": "409",
+    "imageUrl": "https://i1.wp.com/donate.ncjw.org/wp-content/uploads/2015/11/washington-dc-skyline-photo.jpg?fit=1200%2C675",
+    "googlePlaceId": "ChIJW-T2Wt7Gt4kRKl2I1CJFUsI",
+    "name": "Chicago",
+    "teams": [{
+        "name": "Bulls",
+        "sport": "Basketball",
+        "stadiumUrl": "https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg",
+        "logoUrl": "https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg"
+      }]
+}]
+```
+
 Key | Description
 --------- | -----------
 ticketMasterDmaId | The ID used by the TicketMaster API to identify the city
 imageUrl | A URL for an image of the city
 googlePlaceId | The ID used by the Google Places API to identify the city
 name | The name of the city
+teams | List of teams associated with this city
 
+# Ticket Master
 
-<!-- Teams Endpoints -->
-
-
-# Teams
-
-## Get a Specific Team Based On City
+## Get Available Games
 
 ```json
 [{
@@ -104,56 +104,19 @@ name | The name of the city
 }]
 ```
 
-This endpoint retrieves all teams associated with the city with objectId `cityId`.
+Searches the TicketMaster API for games between the dates specified and involving the team
+posted.
 
 ### HTTP Request
 
-`GET https://us-central1-awaygame-api.cloudfunctions.net/api/getTeamsFromCity/:cityId`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-cityId | The objectId of the City
-
-### Response
-
-Key | Description
---------- | -----------
-sport | The sport the team is associated with
-city | The city the team is from
-name | The name of the team
-
-
-# Events
-
-## Get Events
-
-```json
-[{
-    "sport": "Hockey",
-    "city": "Dallas",
-    "name": "Stars"
-},
-{
-    "sport": "Basketball",
-    "city": "Dallas",
-    "name": "Mavericks"
-}]
-```
-
-This endpoint searches TicketMaster for events and games within the date ranges provided for a specific team.
-
-### HTTP Request
-
-`POST https://us-central1-awaygame-api.cloudfunctions.net/api/getEvents`
+`POST https://us-central1-awaygame-api.cloudfunctions.net/api/getAvailableGames`
 
 ### Request Body
 
 Parameter | Description
 --------- | -----------
 team | The name of the team
-city | The name of the city
+dmaId | The DMA ID associated with the city that the user has chosen. 
 startDate | The beginning time to search for games
 endDate | The end time to search for games
 
@@ -179,24 +142,20 @@ name | The name of the team
 ```
 
 
-# Restaurants
+# Itinerary
 
-## Get Restaurant Locations
+## Create Itinerary
 
-This endpoint searches Yelp and Foursquare for restaurants and activites that match the given category.
+Build the user's AwayGame, saves it to the database, and returns the data to the application
 
 ### HTTP Request
 
-`POST https://us-central1-awaygame-api.cloudfunctions.net/api/getLocationsOfRestaurants`
+`POST https://us-central1-awaygame-api.cloudfunctions.net/api/createItinerary`
 
 ### Request Body
 
 ```json
-{
-  "category": "intimate",
-  "longitude": -122.3321,
-  "latitude": 47.6062
-}
+"tbd"
 ```
 
 Parameter | Description
