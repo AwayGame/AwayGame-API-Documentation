@@ -13,6 +13,8 @@ includes:
 search: true
 ---
 
+<!-- To run dev server, run 'bundle exec middleman server' -->
+
 # Introduction
 
 Welcome to the AwayGame Internal API documentation! This documentation can be used by any developer working
@@ -50,66 +52,109 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 -->
 
-# Cities and Teams
+# Search
 
-## Get All Cities
+## Search For Team
 
-This endpoint retrieves all cities and their associated teams in the database. Ideally this
-endpoint should be called as the application loads, as this data is needed to make
-a user's AwayGame.
+This endpoint searches the `teams` index in `Algolia` and returns
+a list of matching teams based on the query string.
 
 ### HTTP Request
 
-`GET https://us-central1-awaygame-api.cloudfunctions.net/api/cities`
+`GET https://us-central1-awaygame-api.cloudfunctions.net/api/search/teams/:qs`
 
 ### Response
 
 ```json
 [{
-    "ticketMasterDmaId": "409",
-    "imageUrl": "https://i1.wp.com/donate.ncjw.org/wp-content/uploads/2015/11/washington-dc-skyline-photo.jpg?fit=1200%2C675",
-    "googlePlaceId": "ChIJW-T2Wt7Gt4kRKl2I1CJFUsI",
-    "name": "Chicago",
-    "teams": [{
-        "name": "Bulls",
-        "sport": "Basketball",
-        "stadiumUrl": "https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg",
-        "logoUrl": "https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg"
-      }]
+    "name": "New England Patriots",
+    "isSchool": false,
+    "league": "NFL",
+    "objectID": "456394311",
+    "_highlightResult": {
+        "name": {
+            "value": "<em>New</em> <em>England</em> <em>Patriots</em>",
+            "matchLevel": "full",
+            "fullyHighlighted": true,
+            "matchedWords": [
+                "new",
+                "england",
+                "patriots"
+            ]
+        },
+        "league": {
+            "value": "NFL",
+            "matchLevel": "none",
+            "matchedWords": []
+        }
+    },
+    {
+        "conference": "SEC",
+        "name": "Wildcats",
+        "isSchool": "true",
+        "school": "Kentucky",
+        "league": "FBS",
+        "objectID": "456398501",
+        "_highlightResult": {
+            "conference": {
+                "value": "SEC",
+                "matchLevel": "none",
+                "matchedWords": []
+            },
+            "name": {
+                "value": "<em>Wildcats</em>",
+                "matchLevel": "partial",
+                "fullyHighlighted": true,
+                "matchedWords": [
+                    "wildcats"
+                ]
+            },
+            "isSchool": {
+                "value": "true",
+                "matchLevel": "none",
+                "matchedWords": []
+            },
+            "school": {
+                "value": "<em>Kentucky</em>",
+                "matchLevel": "partial",
+                "fullyHighlighted": true,
+                "matchedWords": [
+                    "kentucky"
+                ]
+            },
+            "league": {
+                "value": "FBS",
+                "matchLevel": "none",
+                "matchedWords": []
+            }
+        }
+    }
 }]
 ```
 
 Key | Description
 --------- | -----------
-ticketMasterDmaId | The ID used by the TicketMaster API to identify the city
-imageUrl | A URL for an image of the city
-googlePlaceId | The ID used by the Google Places API to identify the city
-name | The name of the city
-teams | List of teams associated with this city
+isSchool | If the team is collegiate level
+school | Name of the school - only returned if `isSchool` is `true`
+league | The league the team is in
+conference | Conference the team is associated with
+name | Name of the team
+objectID | Firebase ObjectID
+_highlightResult | Highlighted result to display from Algolia.
+
+<aside>`_highlightResult` should be used to display the search results to the user</aside>
+
 
 # Ticket Master
 
-## Get Available Games
-
-```json
-[{
-    "sport": "Hockey",
-    "city": "Dallas",
-    "name": "Stars"
-},
-{
-    "sport": "Basketball",
-    "city": "Dallas",
-    "name": "Mavericks"
-}]
-```
+## Search For Games
 
 Searches the TicketMaster API for games between the dates specified and involving the team
 posted.
 
 ### HTTP Request
 
-`POST https://us-central1-awaygame-api.cloudfunctions.net/api/getAvailableGames`
+`POST https://us-central1-awaygame-api.cloudfunctions.net/api/searchForGames`
 
 ### Request Body
 
@@ -122,25 +167,147 @@ endDate | The end time to search for games
 
 ### Response
 
-Key | Description
---------- | -----------
-sport | The sport the team is associated with
-city | The city the team is from
-name | The name of the team
-
 ```json
 [{
-    "sport": "Hockey",
-    "city": "Dallas",
-    "name": "Stars"
-},
-{
-    "sport": "Basketball",
-    "city": "Dallas",
-    "name": "Mavericks"
+    "name": "Kentucky Wildcats Football at Louisville Cardinals Football",
+    "id": "Z7r9jZ1Ae1bu_",
+    "images": [
+        {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RECOMENDATION_16_9.jpg",
+            "width": 100,
+            "height": 56,
+            "fallback": true
+        },
+        {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_TABLET_LANDSCAPE_16_9.jpg",
+            "width": 1024,
+            "height": 576,
+            "fallback": true
+        },
+        {
+            "ratio": "4_3",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_CUSTOM.jpg",
+            "width": 305,
+            "height": 225,
+            "fallback": true
+        },
+        {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": true
+        },
+        {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_TABLET_LANDSCAPE_3_2.jpg",
+            "width": 1024,
+            "height": 683,
+            "fallback": true
+        },
+        {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": true
+        },
+        {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": true
+        },
+        {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_ARTIST_PAGE_3_2.jpg",
+            "width": 305,
+            "height": 203,
+            "fallback": true
+        },
+        {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RETINA_PORTRAIT_16_9.jpg",
+            "width": 640,
+            "height": 360,
+            "fallback": true
+        },
+        {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_EVENT_DETAIL_PAGE_16_9.jpg",
+            "width": 205,
+            "height": 115,
+            "fallback": true
+        }
+    ],
+    "date": {
+        "start": {
+            "localDate": "2018-11-24",
+            "dateTBD": false,
+            "dateTBA": false,
+            "timeTBA": true,
+            "noSpecificTime": false
+        },
+        "status": {
+            "code": "onsale"
+        },
+        "spanMultipleDays": false
+    },
+    "stadium": {
+        "name": "Papa John's Cardinal Stadium",
+        "type": "venue",
+        "id": "ZFr9jZeda6",
+        "test": false,
+        "locale": "en-us",
+        "postalCode": "40209",
+        "timezone": "America/New_York",
+        "city": {
+            "name": "Louisville"
+        },
+        "state": {
+            "name": "Kentucky",
+            "stateCode": "KY"
+        },
+        "country": {
+            "name": "United States Of America",
+            "countryCode": "US"
+        },
+        "address": {
+            "line1": "2770 S. Floyd St."
+        },
+        "location": {
+            "longitude": "-85.751801",
+            "latitude": "38.192699"
+        },
+        "dmas": [
+            {
+                "id": 325
+            }
+        ],
+        "upcomingEvents": {
+            "_total": 8,
+            "tmr": 7,
+            "ticketmaster": 1
+        },
+        "_links": {
+            "self": {
+                "href": "/discovery/v2/venues/ZFr9jZeda6?locale=en-us"
+            }
+        }
+    }
 }]
 ```
 
+Key | Description
+--------- | -----------
+name | The name of the event
+id | The EventID from Ticket Master
+images | Image urls of various sizes for the event
+date | The date of the event
+stadium | Where the event is located
 
 # Itinerary
 
