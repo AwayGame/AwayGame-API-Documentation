@@ -221,10 +221,10 @@
             <a href="#authentication" class="toc-h1 toc-link" data-title="authentication">Authentication</a>
           </li>
           <li>
-            <a href="#cities-and-teams" class="toc-h1 toc-link" data-title="cities-and-teams">Cities and Teams</a>
+            <a href="#search" class="toc-h1 toc-link" data-title="search">Search</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-cities" class="toc-h2 toc-link" data-title="get-all-cities">Get All Cities</a>
+                    <a href="#search-for-team" class="toc-h2 toc-link" data-title="search-for-team">Search For Team</a>
                   </li>
               </ul>
           </li>
@@ -232,7 +232,7 @@
             <a href="#ticket-master" class="toc-h1 toc-link" data-title="ticket-master">Ticket Master</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-available-games" class="toc-h2 toc-link" data-title="get-available-games">Get Available Games</a>
+                    <a href="#search-for-games" class="toc-h2 toc-link" data-title="search-for-games">Search For Games</a>
                   </li>
               </ul>
           </li>
@@ -255,7 +255,8 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='introduction'>Introduction</h1>
+        <!-- To run dev server, run 'bundle exec middleman server' -->
+<h1 id='introduction'>Introduction</h1>
 <p>Welcome to the AwayGame Internal API documentation! This documentation can be used by any developer working
 on the AwayGame mobile app.</p>
 <h1 id='authentication'>Authentication</h1>
@@ -288,23 +289,74 @@ Kittn expects for the API key to be included in all API requests to the server i
 You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 -->
-<h1 id='cities-and-teams'>Cities and Teams</h1><h2 id='get-all-cities'>Get All Cities</h2>
-<p>This endpoint retrieves all cities and their associated teams in the database. Ideally this
-endpoint should be called as the application loads, as this data is needed to make
-a user&#39;s AwayGame.</p>
+<h1 id='search'>Search</h1><h2 id='search-for-team'>Search For Team</h2>
+<p>This endpoint searches the <code>teams</code> index in <code>Algolia</code> and returns
+a list of matching teams based on the query string.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://us-central1-awaygame-api.cloudfunctions.net/api/cities</code></p>
+<p><code>GET https://us-central1-awaygame-api.cloudfunctions.net/api/search/teams/:qs</code></p>
 <h3 id='response'>Response</h3><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
-    </span><span class="s2">"ticketMasterDmaId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"409"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"imageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://i1.wp.com/donate.ncjw.org/wp-content/uploads/2015/11/washington-dc-skyline-photo.jpg?fit=1200%2C675"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"googlePlaceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJW-T2Wt7Gt4kRKl2I1CJFUsI"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chicago"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"teams"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bulls"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"stadiumUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"logoUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://i.ytimg.com/vi/GnKJ-_DspMI/maxresdefault.jpg"</span><span class="w">
-      </span><span class="p">}]</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New England Patriots"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"isSchool"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"league"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NFL"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"objectID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"456394311"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_highlightResult"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;em&gt;New&lt;/em&gt; &lt;em&gt;England&lt;/em&gt; &lt;em&gt;Patriots&lt;/em&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"full"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fullyHighlighted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"new"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"england"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"patriots"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"league"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NFL"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"conference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SEC"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wildcats"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"isSchool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"school"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kentucky"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"league"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FBS"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"objectID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"456398501"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_highlightResult"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"conference"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SEC"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;em&gt;Wildcats&lt;/em&gt;"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"partial"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"fullyHighlighted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"wildcats"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"isSchool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"school"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;em&gt;Kentucky&lt;/em&gt;"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"partial"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"fullyHighlighted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"kentucky"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"league"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FBS"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"matchedWords"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}]</span><span class="w">
 </span></code></pre>
 <table><thead>
@@ -314,41 +366,41 @@ a user&#39;s AwayGame.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td>ticketMasterDmaId</td>
-<td>The ID used by the TicketMaster API to identify the city</td>
+<td>isSchool</td>
+<td>If the team is collegiate level</td>
 </tr>
 <tr>
-<td>imageUrl</td>
-<td>A URL for an image of the city</td>
+<td>school</td>
+<td>Name of the school - only returned if <code>isSchool</code> is <code>true</code></td>
 </tr>
 <tr>
-<td>googlePlaceId</td>
-<td>The ID used by the Google Places API to identify the city</td>
+<td>league</td>
+<td>The league the team is in</td>
+</tr>
+<tr>
+<td>conference</td>
+<td>Conference the team is associated with</td>
 </tr>
 <tr>
 <td>name</td>
-<td>The name of the city</td>
+<td>Name of the team</td>
 </tr>
 <tr>
-<td>teams</td>
-<td>List of teams associated with this city</td>
+<td>objectID</td>
+<td>Firebase ObjectID</td>
+</tr>
+<tr>
+<td>_highlightResult</td>
+<td>Highlighted result to display from Algolia.</td>
 </tr>
 </tbody></table>
-<h1 id='ticket-master'>Ticket Master</h1><h2 id='get-available-games'>Get Available Games</h2><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
-    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hockey"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stars"</span><span class="w">
-</span><span class="p">},</span><span class="w">
-</span><span class="p">{</span><span class="w">
-    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mavericks"</span><span class="w">
-</span><span class="p">}]</span><span class="w">
-</span></code></pre>
+
+<aside>`_highlightResult` should be used to display the search results to the user</aside>
+<h1 id='ticket-master'>Ticket Master</h1><h2 id='search-for-games'>Search For Games</h2>
 <p>Searches the TicketMaster API for games between the dates specified and involving the team
 posted.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/getAvailableGames</code></p>
+<p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/searchForGames</code></p>
 <h3 id='request-body'>Request Body</h3>
 <table><thead>
 <tr>
@@ -373,7 +425,138 @@ posted.</p>
 <td>The end time to search for games</td>
 </tr>
 </tbody></table>
-<h3 id='response-2'>Response</h3>
+<h3 id='response-2'>Response</h3><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kentucky Wildcats Football at Louisville Cardinals Football"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Z7r9jZ1Ae1bu_"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_9"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RECOMENDATION_16_9.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">56</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_9"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_TABLET_LANDSCAPE_16_9.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">1024</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">576</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4_3"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_CUSTOM.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">305</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">225</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_9"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RETINA_LANDSCAPE_16_9.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">1136</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">639</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3_2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_TABLET_LANDSCAPE_3_2.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">1024</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">683</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_9"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_TABLET_LANDSCAPE_LARGE_16_9.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">2048</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">1152</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3_2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RETINA_PORTRAIT_3_2.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">640</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">427</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3_2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_ARTIST_PAGE_3_2.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">305</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_9"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_RETINA_PORTRAIT_16_9.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">640</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">360</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_9"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://s1.ticketm.net/dam/c/093/c74cfd95-af21-4e64-9f85-47677b951093_105651_EVENT_DETAIL_PAGE_16_9.jpg"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">205</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">115</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"localDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-11-24"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dateTBD"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dateTBA"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timeTBA"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"noSpecificTime"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"onsale"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"spanMultipleDays"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"stadium"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Papa John's Cardinal Stadium"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"venue"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZFr9jZeda6"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"test"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en-us"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"postalCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"40209"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Louisville"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kentucky"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"stateCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"KY"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"United States Of America"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"countryCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"line1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2770 S. Floyd St."</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-85.751801"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="s2">"38.192699"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"dmas"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">325</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"upcomingEvents"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"_total"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"tmr"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"ticketmaster"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"_links"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"self"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/discovery/v2/venues/ZFr9jZeda6?locale=en-us"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}]</span><span class="w">
+</span></code></pre>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -381,29 +564,27 @@ posted.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td>sport</td>
-<td>The sport the team is associated with</td>
-</tr>
-<tr>
-<td>city</td>
-<td>The city the team is from</td>
-</tr>
-<tr>
 <td>name</td>
-<td>The name of the team</td>
+<td>The name of the event</td>
+</tr>
+<tr>
+<td>id</td>
+<td>The EventID from Ticket Master</td>
+</tr>
+<tr>
+<td>images</td>
+<td>Image urls of various sizes for the event</td>
+</tr>
+<tr>
+<td>date</td>
+<td>The date of the event</td>
+</tr>
+<tr>
+<td>stadium</td>
+<td>Where the event is located</td>
 </tr>
 </tbody></table>
-<pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w">
-    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hockey"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stars"</span><span class="w">
-</span><span class="p">},</span><span class="w">
-</span><span class="p">{</span><span class="w">
-    </span><span class="s2">"sport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mavericks"</span><span class="w">
-</span><span class="p">}]</span><span class="w">
-</span></code></pre><h1 id='itinerary'>Itinerary</h1><h2 id='create-itinerary'>Create Itinerary</h2>
+<h1 id='itinerary'>Itinerary</h1><h2 id='create-itinerary'>Create Itinerary</h2>
 <p>Build the user&#39;s AwayGame, saves it to the database, and returns the data to the application</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/createItinerary</code></p>
@@ -439,6 +620,10 @@ posted.</p>
 <th>Meaning</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity -- Your request is missing data</td>
+</tr>
 <tr>
 <td>400</td>
 <td>Bad Request -- Your request is invalid.</td>
