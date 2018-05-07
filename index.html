@@ -387,7 +387,7 @@ a list of matching teams based on the query string.</p>
 </tr>
 <tr>
 <td>objectID</td>
-<td>Firebase ObjectID</td>
+<td>Algolia ObjectID</td>
 </tr>
 <tr>
 <td>_highlightResult</td>
@@ -401,7 +401,12 @@ a list of matching teams based on the query string.</p>
 posted.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/searchForGames</code></p>
-<h3 id='request-body'>Request Body</h3>
+<h3 id='request-body'>Request Body</h3><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
+    <span class="nl">team</span><span class="p">:</span> <span class="s2">"Chicago Cubs"</span><span class="p">,</span>
+    <span class="nx">startDate</span><span class="p">:</span> <span class="s2">"07-11-2018"</span><span class="p">,</span>
+    <span class="nx">endDate</span><span class="p">:</span> <span class="s2">"07-13-2018"</span>
+<span class="p">}</span>
+</code></pre>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -411,10 +416,6 @@ posted.</p>
 <tr>
 <td>team</td>
 <td>The name of the team</td>
-</tr>
-<tr>
-<td>dmaId</td>
-<td>The DMA ID associated with the city that the user has chosen.</td>
 </tr>
 <tr>
 <td>startDate</td>
@@ -588,7 +589,18 @@ posted.</p>
 <p>Build the user&#39;s AwayGame, saves it to the database, and returns the data to the application</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://us-central1-awaygame-api.cloudfunctions.net/api/createItinerary</code></p>
-<h3 id='request-body-2'>Request Body</h3><pre class="highlight json tab-json"><code><span class="s2">"tbd"</span><span class="w">
+<h3 id='request-body-2'>Request Body</h3><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.8781</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.6298</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"radius"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"preferences"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"dayActivities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"shopping"</span><span class="p">],</span><span class="w">
+        </span><span class="s2">"nightActivities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"partybars"</span><span class="p">,</span><span class="w"> </span><span class="s2">"nightclubs"</span><span class="p">],</span><span class="w">
+        </span><span class="s2">"food"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"fastFood"</span><span class="p">,</span><span class="w"> </span><span class="s2">"localCusine"</span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"arrivalTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-07-11T15:15:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"departureTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-07-14T12:00:00.000Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 <table><thead>
 <tr>
@@ -597,21 +609,718 @@ posted.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td>category</td>
-<td>The type of location to find</td>
+<td>lat</td>
+<td>The latitude of the stadium - from TicketMaster result</td>
 </tr>
 <tr>
-<td>longitude</td>
-<td>Longitude of the city</td>
+<td>long</td>
+<td>The longitude of the stadium - from TicketMaster result</td>
 </tr>
 <tr>
-<td>latitude</td>
-<td>Latitude of the city</td>
+<td>radius (optional)</td>
+<td>The distance in miles that the user is willing to travel</td>
+</tr>
+<tr>
+<td>preferences</td>
+<td>The user&#39;s preferences that they entered during the walkthrough</td>
+</tr>
+<tr>
+<td>arrivalTime</td>
+<td>The time the user is getting to the city</td>
+</tr>
+<tr>
+<td>departureTime</td>
+<td>The time the user is leaving the city</td>
 </tr>
 </tbody></table>
 <h3 id='response-3'>Response</h3>
-<p>Response here</p>
-<h1 id='errors'>Errors</h1>
+<p><em>Each key in the object is a datestring</em></p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>activityName</td>
+<td>The name of the activity (i.e &#39;breakfast&#39;, &#39;lunch&#39;, etc)</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Name of the business</td>
+</tr>
+<tr>
+<td>placeId</td>
+<td>The Google Places ID for the business</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>The formatted phone number of the business</td>
+</tr>
+<tr>
+<td>location</td>
+<td>Object containing latitude, longitude, and a URL that can be used to show the location on a map via Google</td>
+</tr>
+<tr>
+<td>hours</td>
+<td>Object containing the business&#39; formal hours, formatted and raw</td>
+</tr>
+<tr>
+<td>reviews</td>
+<td>Array of user reviews</td>
+</tr>
+<tr>
+<td>photos</td>
+<td>Image IDS from Google. Use the Google API to show these photos directly</td>
+</tr>
+<tr>
+<td>rating</td>
+<td>The rating of the business, from 1 to 5</td>
+</tr>
+</tbody></table>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"2018-07-13T11:15:00-04:00"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"breakfast"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mangis Fast Foods"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"placeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJv4QCiEHSD4gRpMHIKvOO1Gw"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(773) 477-0406"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3801 N Lincoln Ave, Chicago, IL 60613, USA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.9506851</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.6760199</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"mapsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://maps.google.com/?cid=7842050026204873124"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"formattedHours"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"Monday: 7:00 AM – 8:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Tuesday: 7:00 AM – 8:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Wednesday: 7:00 AM – 8:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Thursday: 7:00 AM – 8:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Friday: 7:00 AM – 8:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Saturday: 7:00 AM – 8:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Sunday: 11:00 AM – 5:00 PM"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"individualDaysData"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1700"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"reviews"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"author_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jason Scerena"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"author_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.google.com/maps/contrib/111547736121046477242/reviews"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"profile_photo_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://lh4.googleusercontent.com/-tt6FzVOE73U/AAAAAAAAAAI/AAAAAAAAE_Q/ey0XeUULMkg/s128-c0x00000000-cc-rp-mo-ba4/photo.jpg"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"relative_time_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8 months ago"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Classic Chicago fast food place. Vienna Beef, gyros, burgers, ect. Old school feel and immaculately clean."</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1503952145</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"CmRaAAAAL3Edp39F-J-K50wvTnRiUk54QB0O3Ra6yGoRytrWfSUBCPFnGMh7V4cuGWcDsFAw5D8nIEXeu-NbS__XJHbHaxQmJ_-M7l8OerdMy3SRyg245gHt7QXeHkyVm0YiZ9y7EhAjxwTRFo8SYkm4IzxBLq0XGhSF7GcQ6VNhAITNEsuFXmmUm0jD6w"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"food"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"subcategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fastFood"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"morningActivity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gap"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"placeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJU7L9qD7TD4gROOAjfPSw050"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(312) 494-8580"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"555 N Michigan Ave, Chicago, IL 60611, USA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.8923786</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.6238844</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"mapsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://maps.google.com/?cid=11372628048141869112"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://www.gap.com/products/chicago-il-store-569.jsp?tid=gpss000001"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"formattedHours"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"Monday: 9:00 AM – 9:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Tuesday: 9:00 AM – 9:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Wednesday: 9:00 AM – 9:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Thursday: 9:00 AM – 9:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Friday: 9:00 AM – 9:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Saturday: 9:00 AM – 9:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Sunday: 9:00 AM – 9:00 PM"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"individualDaysData"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2100"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0900"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"reviews"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"author_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bill Stolte"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"author_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.google.com/maps/contrib/108657571729523357657/reviews"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"profile_photo_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://lh4.googleusercontent.com/-dWsH6G5hUMA/AAAAAAAAAAI/AAAAAAAAJgM/QNXfs5rL_CA/s128-c0x00000000-cc-rp-mo-ba4/photo.jpg"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"relative_time_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 months ago"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Huge sale day so I have to give it 5 stars.  Everything I needed and wanted was deeply discounted... When does that happen????"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1517506910</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"CmRaAAAAVUuSpjR3f16CBVdU-q0NG5wsJykP6hWVN0kGe2PXYhqe0UOJfsuDHy0bwkVyop9KqNever0v82m4TkRG3llc8yMV5Q-q2AQ6B7VdNsHHIauO29Lk9bJBG0bqdiTwTez_EhDZunwVng2f7wmrtdzRTiU5GhTXP2_NA0-rFRr9j1AUXQe4FYoM6Q"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mf">4.3</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"day"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"subcategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shopping"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"lunch"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cohiba Cuban Cuisine"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"placeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJRwnqlQnTD4gRki9WmEChue8"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(773) 935-8866"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2835 N Broadway St, Chicago, IL 60657, USA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.9338209</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.6443982</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"mapsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://maps.google.com/?cid=17274015144562012050"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://themenustar1.com/webspace/menus.php?code=cohibarestaurant.mobile-webview1.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"formattedHours"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"Monday: 11:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Tuesday: 11:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Wednesday: 11:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Thursday: 11:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Friday: 11:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Saturday: 11:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Sunday: 11:00 AM – 10:00 PM"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"individualDaysData"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"reviews"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"author_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dallas Stobb"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"author_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.google.com/maps/contrib/116769898312993628934/reviews"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"profile_photo_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://lh3.googleusercontent.com/-Ofn2q0gp68U/AAAAAAAAAAI/AAAAAAAAADA/SUm0YNeBnsQ/s128-c0x00000000-cc-rp-mo-ba3/photo.jpg"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"relative_time_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a week ago"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My server was very nice, but the Cuban sandwich lacked flavor. I ordered fried yuca and I had to ask for garlic sauce. not really a big deal, but that's the BEST part! if people don't get that they are really missing out!"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1524578445</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"CmRaAAAATzCnZK0fOpFnKuxuRU9xr50eHXOudnmluSS6THPUwMGzWVs69rZHMzfwwWuJm_0vcjbG9_DwrN3fSEs4zdTQKXsBouHltc3I3aYkdCIK92y7EkJCCgIn7ISXfcEYQVUZEhBoCR6EibaLCIcb7lRcoMSfGhSy0MrKcbO7pIW5cSQY2j7oxJADoA"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mf">4.4</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"food"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"subcategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"localCusine"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"afternoonActivity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Southgate Market"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"placeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJxQqi1uwsDogRGVPqkwQo7F0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(312) 944-3777"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1101 S Canal St, Chicago, IL 60607, USA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.868634</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.6386375</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"mapsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://maps.google.com/?cid=6767828340157600537"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://www.mccafferyinterests.com/portfolio/southgate-market"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"formattedHours"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"Monday: 7:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Tuesday: 7:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Wednesday: 7:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Thursday: 7:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Friday: 7:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Saturday: 7:00 AM – 10:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Sunday: 7:00 AM – 10:00 PM"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"individualDaysData"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2200"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0700"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"reviews"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"author_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Henok Tesfay"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"author_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.google.com/maps/contrib/115907576235907344836/reviews"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"profile_photo_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://lh5.googleusercontent.com/-ZZieao_ih30/AAAAAAAAAAI/AAAAAAAAd30/aGKzuLDOgGE/s128-c0x00000000-cc-rp-mo/photo.jpg"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"relative_time_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a month ago"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OK! My first time in a Whole Foods grocery store. My mind was blown I literally stayed in there for 2 hours I couldn't control myself. I tried every sample possible. Search for any and every food. Ended up leaving with only lemonade. Great place with amazing employees especially a lady that worked in the food area she was very helpful. The food is fresh and amazing. I live in Indiana and never been to a whole foods even though theres some here. Would def recommend to anyone and everyone on Earth."</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1521654947</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"CmRaAAAAahNTHsSkbokRPe9e2CYjlneysl9elRT7F1YB3-_9TgySpyYMq7QIWQ-LXZ-difxZUf9tiur9fcgChj74RxukMn85gV4lK7aPu9E2CJufTE53rD23PMDbihvDtFY5oJ7KEhC0rtJnBR6WNL5L433AlSquGhTNGt7wVNbvpE90AMggsZ_HD8wVfQ"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mf">4.2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"day"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"subcategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shopping"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"dinner"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ramirez Fast Food"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"placeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJlXhtdi4tDogRbMuu-kpynx0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(312) 666-8331"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1521 W Grand Ave, Chicago, IL 60642, USA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.89085790000001</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.6664234</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"mapsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://maps.google.com/?cid=2134550414755810156"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"formattedHours"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"Monday: 5:00 AM – 4:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Tuesday: 5:00 AM – 4:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Wednesday: 5:00 AM – 4:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Thursday: 5:00 AM – 4:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Friday: 5:00 AM – 4:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Saturday: 5:00 AM – 2:00 PM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Sunday: Closed"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"individualDaysData"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1600"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1600"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1600"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1600"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1600"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1400"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"reviews"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"author_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tina Marie"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"author_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.google.com/maps/contrib/118445200191023633755/reviews"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"profile_photo_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://lh4.googleusercontent.com/-JAABTVqe4nI/AAAAAAAAAAI/AAAAAAAAAAA/AIcfdXAsxmIAVWEn7Q6KKxdEPDUWe1DqKw/s128-c0x00000000-cc-rp-mo-ba3/photo.jpg"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"relative_time_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a week ago"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"...Because they serve a lot of different foods. Polish, hot dogs, Burgers, Italian beef,tacos, burritos, beans, rice, eggs,chips,luv their fries. Coffee/sodas. From breakfast - brunch - dinner.</span><span class="se">\n</span><span class="s2">👌Everything i like to eat in one place💞"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1524946432</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"CmRaAAAAVUDwgr0xCMYjO_AyIZN7PMk6G-kmge2WzqGxFdjPUlwqfHb6t6QuwiDQFezObRPgQL31h8jrxPQlV1H5C4WcP9VrXtWeF992ZxlCLfqrs9QJFJQSmSfvBW72pP-an-qMEhBlWqv6dSeaulEGfk7VOm_lGhQsbiSwGN7DG1Z9DPB5Dr8Jx9C1mw"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.7</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"food"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"subcategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fastFood"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"eveningActivity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"La Cueva Night Club"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"placeId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChIJgdaDIk8yDogRKbZz_Ha_5ls"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"(773) 475-6544"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4153 W 26th St, Chicago, IL 60623, USA"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">41.84396199999999</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"long"</span><span class="p">:</span><span class="w"> </span><span class="mf">-87.7291023</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"mapsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://maps.google.com/?cid=6622190819857380905"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"formattedHours"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"Monday: Closed"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Tuesday: Closed"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Wednesday: Closed"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Thursday: 8:00 PM – 4:00 AM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Friday: 8:00 PM – 4:00 AM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Saturday: 8:00 PM – 5:00 AM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Sunday: 8:00 PM – 4:00 AM"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"individualDaysData"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0400"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0400"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0400"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="s2">"close"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0500"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="s2">"open"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"day"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"reviews"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"author_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jasmine Garcia"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"author_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.google.com/maps/contrib/112433908557699725155/reviews"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"profile_photo_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://lh3.googleusercontent.com/-nEKcb-44kpg/AAAAAAAAAAI/AAAAAAAAMyw/0sA30HGpzHo/s128-c0x00000000-cc-rp-mo/photo.jpg"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"relative_time_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5 months ago"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The show was good but the waitress where stealing money from the clients. You will pay them for the beer and they would keep the change thinking u didn't wanted it so they where keeping the change as their tip."</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1511716189</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"CmRaAAAA92Gjw7bmACLgFBR4n5RYTcjY8pBJ9LISSO01VjGL_UL4fvs4F3fUfDLDg1FDt0YJXqUh8Wkw1bx2TejazZj1xNbHo-A1ubOKtHlnCmOabrcADjj1bRV3T3i52WyriwjEEhDM60wafF0cv0B-QI6lhqyiGhQDAXWY6sJGocJq9e7mLG1aDC7LQw"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"rating"</span><span class="p">:</span><span class="w"> </span><span class="mf">4.6</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"night"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"subcategory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nightclubs"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h1 id='errors'>Errors</h1>
 <p>The AwayGame API uses the following error codes:</p>
 
 <table><thead>
