@@ -332,7 +332,6 @@ Build the user's AwayGame, saves it to the database, and returns the data to the
 {
     "lat": 41.8781,
     "long": -87.6298,
-    "radius": "5.0",
     "preferences": {
         "dayActivities": ["shopping"],
         "nightActivities": ["partybars", "nightclubs"],
@@ -347,7 +346,6 @@ Parameter | Description
 --------- | -----------
 lat | The latitude of the stadium - from TicketMaster result
 long | The longitude of the stadium - from TicketMaster result
-radius (optional) | The distance in miles that the user is willing to travel
 preferences | The user's preferences that they entered during the walkthrough
 arrivalTime | The time the user is getting to the city
 departureTime | The time the user is leaving the city
@@ -359,6 +357,7 @@ departureTime | The time the user is leaving the city
 Key | Description
 --------- | -----------
 activityName | The name of the activity (i.e 'breakfast', 'lunch', etc)
+backups | Two backup activities for the user
 name | Name of the business
 placeId | The Google Places ID for the business
 phone | The formatted phone number of the business
@@ -373,6 +372,7 @@ rating | The rating of the business, from 1 to 5
 {
     "2018-07-13T11:15:00-04:00": {
         "breakfast": {
+            "backups": [{}, {}],
             "name": "Mangis Fast Foods",
             "placeId": "ChIJv4QCiEHSD4gRpMHIKvOO1Gw",
             "phone": "(773) 477-0406",
